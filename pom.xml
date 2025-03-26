@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>fr.epsi</groupId>
-    <artifactId>service</artifactId>
+    <artifactId>order-service</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>service</name>
     <description>service</description>
