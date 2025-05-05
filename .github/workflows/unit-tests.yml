@@ -5,7 +5,9 @@ on:
     branches: [ main ]
   pull_request:
     branches: [ main ]
-
+env:
+  PR_NAME: $(echo ${GITHUB_HEAD_REF#refs/heads/} | tr '/' '-')
+  PR_NUMBER: $(echo ${{  github.run_number  }})
 jobs:
   test-and-build:
     name: Run Tests and Push Docker
@@ -49,8 +51,8 @@ jobs:
 
       - name: Build Docker image with branch tag
         run: |
-          docker build -t ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/orderartifactory/order-service:${{ steps.extract_branch.outputs.branch }} .
+          docker build -t ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/orderartifactory/order-service:${{env.PR_NUMBER}} .
 
       - name: Push image to Artifact Registry
         run: |
-          docker push ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/orderartifactory/order-service:${{ steps.extract_branch.outputs.branch }}
+          docker push ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/orderartifactory/order-service:${{env.PR_NUMBER}}
