@@ -51,8 +51,8 @@ jobs:
 
       - name: Build Docker image with branch tag
         run: |
-          docker build -t ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/orderartifactory/order-service:${{env.PR_NUMBER}} .
+          docker build -t ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/orderartifactory/order-service:${{env.PR_NAME}} .
 
       - name: Push image to Artifact Registry
         run: |
-          docker push ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/orderartifactory/order-service:${{env.PR_NUMBER}}
+          docker push ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/orderartifactory/order-service:${{env.PR_NAME}}
