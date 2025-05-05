@@ -31,11 +31,6 @@ jobs:
           RELEASE_BRANCHES: main
           DRY_RUN: false
 
-      - name: Commit chore(release) to main
-        run: |
-          git commit --allow-empty -m "chore(release): ${{ steps.versioning.outputs.new_tag }}"
-          git push https://x-access-token:${{ secrets.ORG_TOKEN }}@github.com/${{ github.repository }} HEAD:main
-
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
         with:
@@ -44,5 +39,6 @@ jobs:
           body: |
             🎉 Release automatique générée par GitHub Actions.
             ✅ Version : `${{ steps.versioning.outputs.new_tag }}`
+
         env:
           GITHUB_TOKEN: ${{ secrets.ORG_TOKEN }}
