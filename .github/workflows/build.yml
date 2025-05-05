@@ -16,7 +16,7 @@ jobs:
       - name: Checkout du code
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Important pour SonarCloud
+          fetch-depth: 0
 
       - name: Setup Java 21
         uses: actions/setup-java@v4
