@@ -41,21 +41,21 @@ jobs:
       - name: Build avec Maven et Jacoco
         run: mvn -B clean verify
 
-      - name: Analyse SonarCloud (push ou PR)
-        run: |
-          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
-            mvn sonar:sonar \
-              -Dsonar.projectKey=MSPR-2-KAWA_order-management-service \
-              -Dsonar.organization=mspr-2-kawa \
-              -Dsonar.token=${{ secrets.SONAR_TOKEN }} \
-              -Dsonar.host.url=https://sonarcloud.io \
-              -Dsonar.pullrequest.key=${{ github.event.pull_request.number }} \
-              -Dsonar.pullrequest.branch=${{ github.head_ref }} \
-              -Dsonar.pullrequest.base=${{ github.base_ref }}
-          else
-            mvn sonar:sonar \
-              -Dsonar.projectKey=MSPR-2-KAWA_order-management-service \
-              -Dsonar.organization=mspr-2-kawa \
-              -Dsonar.token=${{ secrets.SONAR_TOKEN }} \
-              -Dsonar.host.url=https://sonarcloud.io
-          fi
+      - name: Analyse SonarCloud (PR)
+        if: github.event_name == 'pull_request'
+        run: mvn sonar:sonar \
+          -Dsonar.projectKey=MSPR-2-KAWA_order-management-service \
+          -Dsonar.organization=mspr-2-kawa \
+          -Dsonar.token=${{ secrets.SONAR_TOKEN }} \
+          -Dsonar.host.url=https://sonarcloud.io \
+          -Dsonar.pullrequest.key=${{ github.event.pull_request.number }} \
+          -Dsonar.pullrequest.branch=${{ github.head_ref }} \
+          -Dsonar.pullrequest.base=${{ github.base_ref }}
+
+      - name: Analyse SonarCloud (push)
+        if: github.event_name != 'pull_request'
+        run: mvn sonar:sonar \
+          -Dsonar.projectKey=MSPR-2-KAWA_order-management-service \
+          -Dsonar.organization=mspr-2-kawa \
+          -Dsonar.token=${{ secrets.SONAR_TOKEN }} \
+          -Dsonar.host.url=https://sonarcloud.io
