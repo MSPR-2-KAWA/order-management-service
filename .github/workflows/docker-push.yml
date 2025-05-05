@@ -13,8 +13,11 @@ jobs:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
 
     steps:
-      - name: Checkout code
+      - name: Checkout code from triggering workflow
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_branch }}
+          repository: ${{ github.event.workflow_run.head_repository.full_name }}
 
       - name: Set up Java
         uses: actions/setup-java@v4
@@ -41,10 +44,14 @@ jobs:
         run: |
           gcloud auth configure-docker ${{ secrets.GCP_REGION }}-docker.pkg.dev --quiet
 
+      - name: Get branch name (sanitize for tag)
+        id: extract_branch
+        run: echo "branch=$(echo '${{ github.event.workflow_run.head_branch }}' | tr '/' '-')" >> $GITHUB_OUTPUT
+
       - name: Build Docker image with branch tag
         run: |
-          docker build -t ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/orderartifactory/order-service:${{ github.ref_name }} .
+          docker build -t ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/orderartifactory/order-service:${{ steps.extract_branch.outputs.branch }} .
 
       - name: Push image to Artifact Registry
         run: |
-          docker push ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/orderartifactory/order-service:${{ github.ref_name }}
+          docker push ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/orderartifactory/order-service:${{ steps.extract_branch.outputs.branch }}
