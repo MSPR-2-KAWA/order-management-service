@@ -25,7 +25,7 @@ jobs:
         id: versioning
         uses: anothrNick/github-tag-action@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.ORG_TOKEN }}
           DEFAULT_BUMP: patch                # change to minor/major if needed
           WITH_V: true                       # tags like v1.2.3
           RELEASE_BRANCHES: main
@@ -54,4 +54,4 @@ jobs:
             🧾 Changelog:
             ${{ steps.changelog.outputs.CHANGELOG }}
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.ORG_TOKEN }}
