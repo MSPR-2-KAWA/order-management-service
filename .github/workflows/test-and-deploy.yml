@@ -62,5 +62,3 @@ jobs:
             --image=${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/orderartifactory/order-service:${{env.PR_NAME}} \
             --region=${{ secrets.GCP_REGION }} \
             --platform=managed \
-            --service-account=${{ secrets.GCP_SA_BACKEND_KEY }} \
-            --allow-unauthenticated
