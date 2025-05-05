@@ -1,0 +1,57 @@
+name: Create Release on Merge
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  release:
+    name: Release and Tag
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Git user
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Auto version bump and tag
+        id: versioning
+        uses: anothrNick/github-tag-action@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DEFAULT_BUMP: patch                # change to minor/major if needed
+          WITH_V: true                       # tags like v1.2.3
+          RELEASE_BRANCHES: main
+          DRY_RUN: false
+
+      - name: Commit release tag
+        run: |
+          git commit --allow-empty -m "chore(release): ${{ steps.versioning.outputs.new_tag }}"
+          git push origin main
+
+      - name: Generate changelog from commits
+        id: changelog
+        run: |
+          echo "CHANGELOG<<EOF" >> $GITHUB_OUTPUT
+          git log $(git describe --tags --abbrev=0)..HEAD --pretty=format:"- %s" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ steps.versioning.outputs.new_tag }}
+          name: "Release ${{ steps.versioning.outputs.new_tag }}"
+          body: |
+            ✅ Automated release from merged PR.
+
+            🧾 Changelog:
+            ${{ steps.changelog.outputs.CHANGELOG }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
