@@ -141,9 +141,9 @@
                 </executions>
                 <configuration>
                     <excludes>
-                        <exclude>fr/epsi/order/dto/**</exclude>
-                        <exclude>fr/epsi/order/customer/dto/**</exclude>
-                        <exclude>fr/epsi/order/customer/Order.class</exclude>
+                        <exclude>fr/epsi/service/dto/**</exclude>
+                        <exclude>fr/epsi/service/order/dto/**</exclude>
+                        <exclude>fr/epsi/service/order/Order.class</exclude>
                     </excludes>
                 </configuration>
             </plugin>
