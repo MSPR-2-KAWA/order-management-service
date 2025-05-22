@@ -1,15 +1,44 @@
 package fr.epsi.service.order;
-
+import fr.epsi.service.order.dto.OrderDTO;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
 public class OrderController {
 
-    @GetMapping("/order")
-    public String HelloWorld() {
-        return "Hello world";
+    private final OrderService orderService;
+
+    @GetMapping("/api/orders")
+    public List<Order> getAllOrder() {
+        return orderService.getAll();
     }
+
+    @GetMapping("api/orders/{id}")
+    public Order getOrderById(@PathVariable Integer id) {
+        return orderService.getById(id);
+    }
+
+    @PutMapping("api/orders/{id}")
+    public Order updateOrder(@PathVariable Integer id, @RequestBody OrderDTO updateOrderDTO) {
+        return orderService.update(id, updateOrderDTO);
+    }
+
+    @PostMapping("api/orders")
+    public Order createOrder(@RequestBody OrderDTO createOrderDTO) {
+        return orderService.create(createOrderDTO);
+    }
+
+    @DeleteMapping("api/orders/{id}")
+    public ResponseEntity<Void> deleteOrder(@PathVariable Integer id) {
+        orderService.delete(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+
 }
