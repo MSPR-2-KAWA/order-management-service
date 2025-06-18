@@ -30,6 +30,10 @@
         <java.version>21</java.version>
         <sonar.organization>mspr-2-kawa</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+        <sonar.exclusions>**/*Config.java,**/*Configuration.java,**/config/**,**/*Entity.java,**/*Dto.java,**</sonar.exclusions>
+        <sonar.test.exclusions>
+            sonar.test.exclusions=src/main/resource/**,**/config/**
+        </sonar.test.exclusions>
     </properties>
     <dependencies>
         <dependency>
@@ -141,9 +145,9 @@
                 </executions>
                 <configuration>
                     <excludes>
-                        <exclude>fr/epsi/order/dto/**</exclude>
-                        <exclude>fr/epsi/order/customer/dto/**</exclude>
-                        <exclude>fr/epsi/order/customer/Order.class</exclude>
+                        <exclude>fr/epsi/service/dto/**</exclude>
+                        <exclude>fr/epsi/service/order/dto/**</exclude>
+                        <exclude>fr/epsi/service/order/Order.class</exclude>
                     </excludes>
                 </configuration>
             </plugin>
