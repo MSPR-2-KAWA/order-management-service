@@ -1,6 +1,6 @@
 package fr.epsi.service.order;
 
-import fr.epsi.service.order.dto.OrderDTO;
+import fr.epsi.service.order.dto.OrderDto;
 import fr.epsi.service.order.dto.OrderProductItemDto;
 import fr.epsi.service.order.dto.ProductCommandDto;
 import org.junit.jupiter.api.Nested;
@@ -73,7 +73,7 @@ public class OrderServiceTest {
 
         @Test
         void shouldCreateOrderSuccessfully() {
-            OrderDTO createOrderDTO = new OrderDTO(123, List.of(
+            OrderDto createOrderDto = new OrderDto(123, List.of(
                     new OrderProductItemDto(101, 2),
                     new OrderProductItemDto(102, 5)
             ));
@@ -85,7 +85,7 @@ public class OrderServiceTest {
 
             when(orderRepository.save(Mockito.any(OrderProduct.class))).thenReturn(createdOrder);
 
-            OrderProduct result = orderService.create(createOrderDTO);
+            OrderProduct result = orderService.create(createOrderDto);
 
             verify(orderRepository).save(Mockito.any(OrderProduct.class));
             assertEquals(createdOrder.getCustomerId(), result.getCustomerId());
@@ -95,7 +95,7 @@ public class OrderServiceTest {
 
         @Test
         void shouldPublishOrderItemsOnCreate() {
-            OrderDTO createOrderDTO = new OrderDTO(123, List.of(
+            OrderDto createOrderDto = new OrderDto(123, List.of(
                     new OrderProductItemDto(101, 2),
                     new OrderProductItemDto(102, 5)
             ));
@@ -112,7 +112,7 @@ public class OrderServiceTest {
 
             when(orderRepository.save(Mockito.any(OrderProduct.class))).thenReturn(createdOrder);
 
-            orderService.create(createOrderDTO);
+            orderService.create(createOrderDto);
 
             verify(orderPublisher).publishOrderIds(expectedPayload);
         }
@@ -175,7 +175,7 @@ public class OrderServiceTest {
             @Test
             void shouldUpdateOrderWhenOrderExists() {
                 Integer orderId = 1;
-                OrderDTO updateOrderDTO = new OrderDTO(999, List.of(
+                OrderDto updateOrderDto = new OrderDto(999, List.of(
                         new OrderProductItemDto(101, 10),
                         new OrderProductItemDto(102, 15)
                 ));
@@ -197,7 +197,7 @@ public class OrderServiceTest {
 
                 when(orderRepository.save(Mockito.any(OrderProduct.class))).thenReturn(updatedOrder);
 
-                OrderProduct result = orderService.update(orderId, updateOrderDTO);
+                OrderProduct result = orderService.update(orderId, updateOrderDto);
 
                 verify(orderRepository).save(Mockito.any(OrderProduct.class));
                 assertEquals(updatedOrder.getCustomerId(), result.getCustomerId());
@@ -208,14 +208,14 @@ public class OrderServiceTest {
             @Test
             void shouldThrowExceptionWhenOrderToUpdateNotFound() {
                 Integer orderId = 1;
-                OrderDTO updateOrderDTO = new OrderDTO(999, List.of(
+                OrderDto updateOrderDto = new OrderDto(999, List.of(
                         new OrderProductItemDto(101, 10)
                 ));
 
                 when(orderRepository.findById(orderId)).thenReturn(java.util.Optional.empty());
 
                 ResponseStatusException exception = org.junit.jupiter.api.Assertions.assertThrows(
-                        ResponseStatusException.class, () -> orderService.update(orderId, updateOrderDTO)
+                        ResponseStatusException.class, () -> orderService.update(orderId, updateOrderDto)
                 );
 
                 assertEquals("404 NOT_FOUND \"Order1not found\"", exception.getMessage());

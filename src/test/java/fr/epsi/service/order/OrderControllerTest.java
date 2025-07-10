@@ -1,6 +1,6 @@
 package fr.epsi.service.order;
 
-import fr.epsi.service.order.dto.OrderDTO;
+import fr.epsi.service.order.dto.OrderDto;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -60,7 +60,7 @@ public class OrderControllerTest {
             OrderProductItem item2 = new OrderProductItem(null, 102, 3, updatedOrder);
             updatedOrder.setItems(List.of(item1, item2));
 
-            when(orderService.update(Mockito.eq(1), Mockito.any(OrderDTO.class)))
+            when(orderService.update(Mockito.eq(1), Mockito.any(OrderDto.class)))
                     .thenReturn(updatedOrder);
 
             mockMvc.perform(put("/api/orders/{id}", 1)
@@ -87,7 +87,7 @@ public class OrderControllerTest {
 
         @Test
         void shouldReturnNotFoundWhenUpdatingNonExistentOrder() throws Exception {
-            when(orderService.update(Mockito.eq(999), Mockito.any(OrderDTO.class)))
+            when(orderService.update(Mockito.eq(999), Mockito.any(OrderDto.class)))
                     .thenThrow(new ResponseStatusException(HttpStatus.NOT_FOUND, "Order 999 not found"));
 
             mockMvc.perform(put("/api/orders/{id}", 999)
@@ -140,7 +140,7 @@ public class OrderControllerTest {
             OrderProductItem item2 = new OrderProductItem(null, 102, 3, createdOrder);
             createdOrder.setItems(List.of(item1, item2));
 
-            when(orderService.create(Mockito.any(OrderDTO.class))).thenReturn(createdOrder);
+            when(orderService.create(Mockito.any(OrderDto.class))).thenReturn(createdOrder);
 
             mockMvc.perform(post("/api/orders")
                             .contentType("application/json")

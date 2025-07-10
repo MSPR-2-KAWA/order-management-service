@@ -1,6 +1,6 @@
 package fr.epsi.service.order;
 
-import fr.epsi.service.order.dto.OrderDTO;
+import fr.epsi.service.order.dto.OrderDto;
 import fr.epsi.service.order.dto.ProductCommandDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -26,17 +26,17 @@ public class OrderService {
         );
     }
 
-    public OrderProduct update(Integer id, OrderDTO updateOrderDTO) {
+    public OrderProduct update(Integer id, OrderDto updateOrderDto) {
         OrderProduct dbOrderProduct = getById(id);
 
-        List<OrderProductItem> items = updateOrderDTO.getItems().stream()
+        List<OrderProductItem> items = updateOrderDto.getItems().stream()
                 .map(dto -> new OrderProductItem(null, dto.getProductId(), dto.getQuantity(), null))
                 .toList();
 
         OrderProduct updatedOrder = new OrderProduct(
                 dbOrderProduct.getId(),
                 dbOrderProduct.getCreatedAt(),
-                updateOrderDTO.getCustomerId(),
+                updateOrderDto.getCustomerId(),
                 items
         );
 
@@ -45,12 +45,12 @@ public class OrderService {
         return orderRepository.save(updatedOrder);
     }
 
-    public OrderProduct create(OrderDTO createOrderDTO) {
-        List<OrderProductItem> items = createOrderDTO.getItems().stream()
+    public OrderProduct create(OrderDto createOrderDto) {
+        List<OrderProductItem> items = createOrderDto.getItems().stream()
                 .map(dto -> new OrderProductItem(null, dto.getProductId(), dto.getQuantity(), null))
                 .toList();
 
-        OrderProduct order = new OrderProduct(createOrderDTO.getCustomerId(), items);
+        OrderProduct order = new OrderProduct(createOrderDto.getCustomerId(), items);
 
         items.forEach(i -> i.setOrder(order));
 

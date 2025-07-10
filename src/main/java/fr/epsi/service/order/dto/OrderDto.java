@@ -7,7 +7,7 @@ import java.util.List;
 
 @Value
 @AllArgsConstructor
-public class OrderDTO {
+public class OrderDto {
     Integer customerId;
     List<OrderProductItemDto> items;
 }
