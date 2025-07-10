@@ -15,22 +15,22 @@ public class OrderController {
     private final OrderService orderService;
 
     @GetMapping("/api/orders")
-    public List<Order> getAllOrder() {
+    public List<OrderProduct> getAllOrder() {
         return orderService.getAll();
     }
 
     @GetMapping("api/orders/{id}")
-    public Order getOrderById(@PathVariable Integer id) {
+    public OrderProduct getOrderById(@PathVariable Integer id) {
         return orderService.getById(id);
     }
 
     @PutMapping("api/orders/{id}")
-    public Order updateOrder(@PathVariable Integer id, @RequestBody OrderDTO updateOrderDTO) {
+    public OrderProduct updateOrder(@PathVariable Integer id, @RequestBody OrderDTO updateOrderDTO) {
         return orderService.update(id, updateOrderDTO);
     }
 
     @PostMapping("api/orders")
-    public Order createOrder(@RequestBody OrderDTO createOrderDTO) {
+    public OrderProduct createOrder(@RequestBody OrderDTO createOrderDTO) {
         return orderService.create(createOrderDTO);
     }
 
