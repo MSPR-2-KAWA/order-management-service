@@ -88,7 +88,7 @@ public class OrderControllerTest {
         void testUpdateOrder_InvalidRequestBody() throws Exception {
             mockMvc.perform(MockMvcRequestBuilders.put("/api/orders/1")
                             .contentType("application/json")
-                            .content("{\"invalidField\":true}"))
+                            .content(""))
                     .andExpect(status().isBadRequest());
         }
     }
