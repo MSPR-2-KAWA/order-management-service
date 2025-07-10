@@ -27,11 +27,12 @@ public class OrderProduct {
 
     private Integer customerId;
 
-    private List<Integer> productIds;
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<OrderProductItem> items;
 
-    public OrderProduct(Integer customerId, List<Integer> productIds) {
-
+    public OrderProduct(Integer customerId, List<OrderProductItem> items) {
         this.customerId = customerId;
-        this.productIds = productIds;
+        this.items = items;
+        this.items.forEach(i -> i.setOrder(this)); // important pour la liaison bidirectionnelle
     }
 }
