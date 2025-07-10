@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Order {
+public class OrderProduct {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,7 +26,7 @@ public class Order {
 
     private Integer customerId;
 
-    public Order(Integer customerId) {
+    public OrderProduct(Integer customerId) {
         this.customerId = customerId;
     }
 }

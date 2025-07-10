@@ -13,27 +13,27 @@ import fr.epsi.service.order.dto.OrderDTO;
 public class OrderService {
     private final OrderRepository orderRepository;
 
-    public List<Order> getAll() {
+    public List<OrderProduct> getAll() {
         return orderRepository.findAll();
     }
 
-    public Order getById(Integer id) {
+    public OrderProduct getById(Integer id) {
         return orderRepository.findById(id).orElseThrow(
                 () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Order" + id + "not found")
         );
     }
 
-    public Order update(Integer id, OrderDTO updateOrderDTO) {
-        Order dbOrder = getById(id);
-        return orderRepository.save(new Order(
-                dbOrder.getId(),
-                dbOrder.getCreatedAt(),
+    public OrderProduct update(Integer id, OrderDTO updateOrderDTO) {
+        OrderProduct dbOrderProduct = getById(id);
+        return orderRepository.save(new OrderProduct(
+                dbOrderProduct.getId(),
+                dbOrderProduct.getCreatedAt(),
                 updateOrderDTO.getCustomerId()
         ));
     }
 
-    public Order create(OrderDTO createOrderDTO) {
-        return orderRepository.save(new Order(
+    public OrderProduct create(OrderDTO createOrderDTO) {
+        return orderRepository.save(new OrderProduct(
             createOrderDTO.getCustomerId()
         ));
     }
