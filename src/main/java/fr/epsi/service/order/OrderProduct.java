@@ -1,6 +1,7 @@
 package fr.epsi.service.order;
 
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -28,6 +29,7 @@ public class OrderProduct {
     private Integer customerId;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<OrderProductItem> items;
 
     public OrderProduct(Integer customerId, List<OrderProductItem> items) {
