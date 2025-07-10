@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -26,7 +27,11 @@ public class OrderProduct {
 
     private Integer customerId;
 
-    public OrderProduct(Integer customerId) {
+    private List<Integer> productIds;
+
+    public OrderProduct(Integer customerId, List<Integer> productIds) {
+
         this.customerId = customerId;
+        this.productIds = productIds;
     }
 }

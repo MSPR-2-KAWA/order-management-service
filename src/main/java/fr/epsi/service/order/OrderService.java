@@ -1,11 +1,12 @@
 package fr.epsi.service.order;
 
-import java.util.List;
+import fr.epsi.service.order.dto.OrderDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
-import fr.epsi.service.order.dto.OrderDTO;
+
+import java.util.List;
 
 
 @Service
@@ -28,13 +29,15 @@ public class OrderService {
         return orderRepository.save(new OrderProduct(
                 dbOrderProduct.getId(),
                 dbOrderProduct.getCreatedAt(),
-                updateOrderDTO.getCustomerId()
+                updateOrderDTO.getCustomerId(),
+                updateOrderDTO.getProductIds()
         ));
     }
 
     public OrderProduct create(OrderDTO createOrderDTO) {
         return orderRepository.save(new OrderProduct(
-            createOrderDTO.getCustomerId()
+                createOrderDTO.getCustomerId(),
+                createOrderDTO.getProductIds()
         ));
     }
 
