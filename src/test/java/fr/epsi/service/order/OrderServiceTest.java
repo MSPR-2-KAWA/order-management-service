@@ -2,6 +2,7 @@ package fr.epsi.service.order;
 
 import fr.epsi.service.order.dto.OrderDTO;
 import fr.epsi.service.order.dto.OrderProductItemDto;
+import fr.epsi.service.order.dto.ProductCommandDto;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,6 +26,9 @@ public class OrderServiceTest {
 
     @InjectMocks
     OrderService orderService;
+
+    @Mock
+    OrderPublisher orderPublisher;
 
 
     @Nested
@@ -61,6 +65,56 @@ public class OrderServiceTest {
             List<OrderProduct> result = orderService.getAll();
 
             assertEquals(mockOrders, result);
+        }
+    }
+
+    @Nested
+    class create {
+
+        @Test
+        void shouldCreateOrderSuccessfully() {
+            OrderDTO createOrderDTO = new OrderDTO(123, List.of(
+                    new OrderProductItemDto(101, 2),
+                    new OrderProductItemDto(102, 5)
+            ));
+
+            OrderProduct createdOrder = new OrderProduct(123, List.of(
+                    new OrderProductItem(null, 101, 2, null),
+                    new OrderProductItem(null, 102, 5, null)
+            ));
+
+            when(orderRepository.save(Mockito.any(OrderProduct.class))).thenReturn(createdOrder);
+
+            OrderProduct result = orderService.create(createOrderDTO);
+
+            verify(orderRepository).save(Mockito.any(OrderProduct.class));
+            assertEquals(createdOrder.getCustomerId(), result.getCustomerId());
+            assertEquals(createdOrder.getItems().size(), result.getItems().size());
+            assertEquals(createdOrder.getItems().get(0).getProductId(), result.getItems().get(0).getProductId());
+        }
+
+        @Test
+        void shouldPublishOrderItemsOnCreate() {
+            OrderDTO createOrderDTO = new OrderDTO(123, List.of(
+                    new OrderProductItemDto(101, 2),
+                    new OrderProductItemDto(102, 5)
+            ));
+
+            OrderProduct createdOrder = new OrderProduct(123, List.of(
+                    new OrderProductItem(null, 101, 2, null),
+                    new OrderProductItem(null, 102, 5, null)
+            ));
+
+            List<ProductCommandDto> expectedPayload = List.of(
+                    new ProductCommandDto(101, 2),
+                    new ProductCommandDto(102, 5)
+            );
+
+            when(orderRepository.save(Mockito.any(OrderProduct.class))).thenReturn(createdOrder);
+
+            orderService.create(createOrderDTO);
+
+            verify(orderPublisher).publishOrderIds(expectedPayload);
         }
     }
 
