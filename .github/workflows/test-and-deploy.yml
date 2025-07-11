@@ -57,6 +57,7 @@ jobs:
         run: |
           docker push ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/orderartifactory/order-service:${{env.PR_NAME}}
       - name: Deploy to Cloud Run
+        if: github.event_name == 'push'
         run: |
           gcloud run deploy order-service \
             --image=${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/orderartifactory/order-service:${{env.PR_NAME}} \

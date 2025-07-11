@@ -1,5 +1,5 @@
 package fr.epsi.service.order;
-import fr.epsi.service.order.dto.OrderDTO;
+import fr.epsi.service.order.dto.OrderDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,13 +25,13 @@ public class OrderController {
     }
 
     @PutMapping("api/orders/{id}")
-    public OrderProduct updateOrder(@PathVariable Integer id, @RequestBody OrderDTO updateOrderDTO) {
-        return orderService.update(id, updateOrderDTO);
+    public OrderProduct updateOrder(@PathVariable Integer id, @RequestBody OrderDto updateOrderDto) {
+        return orderService.update(id, updateOrderDto);
     }
 
     @PostMapping("api/orders")
-    public OrderProduct createOrder(@RequestBody OrderDTO createOrderDTO) {
-        return orderService.create(createOrderDTO);
+    public OrderProduct createOrder(@RequestBody OrderDto createOrderDto) {
+        return orderService.create(createOrderDto);
     }
 
     @DeleteMapping("api/orders/{id}")

@@ -1,6 +1,7 @@
 package fr.epsi.service.order;
 
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -8,6 +9,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -26,7 +28,13 @@ public class OrderProduct {
 
     private Integer customerId;
 
-    public OrderProduct(Integer customerId) {
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<OrderProductItem> items;
+
+    public OrderProduct(Integer customerId, List<OrderProductItem> items) {
         this.customerId = customerId;
+        this.items = items;
+        this.items.forEach(i -> i.setOrder(this)); // important pour la liaison bidirectionnelle
     }
 }
